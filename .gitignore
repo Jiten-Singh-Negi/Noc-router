@@ -1,0 +1,18 @@
+*.dir/
+*.jou
+*.log
+*.pb
+*.str
+.Xil/
+Noc-router.runs/
+Noc-router.cache/
+Noc-router.hw/
+Noc-router.sim/
+Noc-router.ip_user_files/
+*.wdb
+*.vcd
+*.wcfg
+# Keep the project file and your source code
+!*.xpr
+!*.srcs/
+*.zip
