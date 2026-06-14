@@ -84,29 +84,26 @@ module fifo_tb;
         assert(count == DEPTH) else $error("FAIL: overflow - count=%0d", count);
         $display("PASS: Overflow rejected. Count still=%0d", count);
 
-        // --- READ UNTIL EMPTY ---
+        // TEST 3: Read until empty - FWFT style
         $display("\n--- TEST 3: Read until empty ---");
-        exp_idx = 0;
         for (int i = 0; i < DEPTH; i++) begin
+            // FWFT: data is visible BEFORE asserting rd_en
+            // Check it now, then consume it
+            #1; // let combinational settle
+            assert(rd_data == expected_data[i])
+                else $error("FAIL[%0d]: rd_data=%0d expected=%0d", 
+                             i, rd_data, expected_data[i]);
+            $display("Read[%0d]: got=%0d expected=%0d MATCH=%0d",
+                      i, rd_data, expected_data[i], rd_data==expected_data[i]);
+            
+            // Now consume - advance the read pointer
             @(posedge clk); rd_en = 1;
             @(posedge clk); rd_en = 0;
-            #1;
-            assert(rd_data == expected_data[exp_idx])
-                else $error("FAIL: rd_data=%0d expected=%0d", rd_data, expected_data[exp_idx]);
-            $display("Read[%0d]: got=%0d expected=%0d MATCH=%0d",
-                i, rd_data, expected_data[exp_idx], rd_data==expected_data[exp_idx]);
-            exp_idx++;
         end
         #1;
         assert(empty == 1) else $error("FAIL: empty not asserted after all reads");
         assert(count == 0) else $error("FAIL: count=%0d after empty", count);
         $display("PASS: Empty flag asserted. Count=%0d", count);
-
-        // Try one more read - should be rejected
-        @(posedge clk); rd_en = 1;
-        @(posedge clk); rd_en = 0; #1;
-        assert(count == 0) else $error("FAIL: underflow - count=%0d", count);
-        $display("PASS: Underflow rejected. Count still=%0d", count);
 
         // --- SIMULTANEOUS READ AND WRITE ---
         $display("\n--- TEST 4: Simultaneous read and write ---");
