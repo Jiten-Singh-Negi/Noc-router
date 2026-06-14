@@ -23,9 +23,6 @@ To ensure enterprise-grade reliability, the RTL includes embedded SystemVerilog 
 The verification environment includes a custom probabilistic traffic generator (`traffic_gen_tb.sv`) that subjects the 2x2 mesh to Uniform Random traffic across a sweep of injection rates. 
 
 ### Latency vs. Throughput Metrics
-*(Upload your `noc_performance_metrics.png` here)*
-![NoC Performance Graph](noc_performance_metrics.png)
-
 **Results:**
 * **Zero-Load Latency:** The network exhibits ultra-low latency (~5-18 cycles) in the uncongested linear region (Injection Rate `0.05` - `0.20`).
 * **Throughput Tracking:** Actual throughput flawlessly tracks ideal throughput up to `0.20` flits/node/cycle.
